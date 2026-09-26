@@ -82,6 +82,7 @@ class PPOAgent:
 
     def _perform_update(self) -> Dict[str, float]:
         """Perform PPO update using collected rollout"""
+        
         all_stats = []
 
         # To log metrics correctly, make sure you have the following lines in this function
@@ -99,7 +100,13 @@ class PPOAgent:
         
         # ---------------- Problem 1.4.2: KL Divergence Beta Update ----------------
         ### BEGIN STUDENT SOLUTION - 1.4.2 ###
-
+        d_targ = self.target_kl
+        kl_approx = stats[kl_approx].mean().item()
+        if kl_approx < d_targ/1.5:
+            self.beta = self.beta/2
+        elif kl_approx > d_targ*1.5:
+            self.beta = 2*self.beta
+            
         ### END STUDENT SOLUTION - 1.4.2 ###
         
         if all_stats:
@@ -148,14 +155,29 @@ class PPOAgent:
         total_loss = 0 # Placeholder
         ratio = 0 # Placeholder
 
+        eps = self.clip_coef
+
         # ---------------- Problem 1.4.2: KL Divergence Policy Loss ----------------
         ### BEGIN STUDENT SOLUTION - 1.4.2 ###
+        # kl_approx = old_log_probs - log_probs
 
+        # klpen_loss = (torch.exp(log_probs - old_log_probs)*advantages - self.beta*kl_approx).mean()
+
+        
+        
         ### END STUDENT SOLUTION - 1.4.2 ###
         
         # ---------------- Problem 1.1.1: PPO Clipped Surrogate Objective Loss ----------------
         ### BEGIN STUDENT SOLUTION - 1.1.1 ###
-
+        old_log_probs = old_log_probs.squeeze(-1)
+        log_probs = log_probs.squeeze(-1)
+        advantages = advantages.squeeze(-1)
+        assert log_probs.shape == old_log_probs.shape == advantages.shape, f"Screwed up shapes - \
+            old_log_probs: {old_log_probs.shape}, log_probs: {log_probs.shape}, advantages: {advantages.shape}"
+        
+        ratio = torch.exp(log_probs - old_log_probs)
+        clipped_adv = ratio.clamp(1 - eps, 1 + eps) * advantages
+        policy_loss = torch.minimum(ratio * advantages, clipped_adv).mean()
         ### END STUDENT SOLUTION - 1.1.1 ###
         
         
@@ -168,7 +190,19 @@ class PPOAgent:
 
         # ---------------- Problem 1.1.2: PPO Total Loss (Include Entropy Bonus and Value Loss) ----------------
         ### BEGIN STUDENT SOLUTION - 1.1.2 ###
+        value_preds = values.squeeze(-1)
+        value_targets = returns.squeeze(-1)
+        assert value_preds.shape == value_targets.shape, f"Screwed up shapes - \
+            value_preds: {value_preds.shape}, value_targets: {value_targets.shape}"
 
+        entropy_loss = entropy.mean()
+        value_loss = (value_preds - value_targets).square().mean()
+        
+        total_loss = policy_loss - \
+            self.vf_coef * value_loss + \
+                self.ent_coef * entropy_loss
+
+        total_loss = -total_loss # Account for minimizing loss
         ### END STUDENT SOLUTION - 1.1.2 ###
 
         # Stats
