@@ -125,7 +125,19 @@ class PPOAgent:
 
         # ---------------- Problem 1.2: Compute GAE ----------------
         ### BEGIN STUDENT SOLUTION - 1.2 ###
-        
+        last_gae = 0.0
+        for t in reversed(range(T)):
+            if t == T-1:
+                next_value = final_v
+            else:
+                next_value = values[t+1]
+
+            not_done = 1.0 - float(dones[t])
+            td_error = rewards[t] + self.gamma * next_value * not_done - values[t]
+            last_gae = td_error + self.gamma * self.gae_lambda * not_done * last_gae
+            advantages[t] = last_gae
+
+        returns[:] = advantages + values
         ### END STUDENT SOLUTION - 1.2 ###
         
         return advantages, returns
