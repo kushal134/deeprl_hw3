@@ -78,10 +78,10 @@ class PPOAgent:
 
         if stop:
             advantages, returns = self._compute_gae(self._curr_policy_rollout)
-            self._curr_policy_rollout = [] # reset
-
             batch = self._prepare_batch(advantages, returns)
             self._rollout_buffer.add_batch(batch)
+
+            self._curr_policy_rollout = [] # reset
 
 
             if self._steps_collected_with_curr_policy >= self.rollout_steps:
@@ -103,17 +103,25 @@ class PPOAgent:
         
         # ---------------- Problem 1.3.2: PPO Update ----------------
         ### BEGIN STUDENT SOLUTION - 1.3.2 ###
-        n_minibatches = self.rollout_steps/self.minibatch_size
+        n_minibatches = self.rollout_steps//self.minibatch_size
         filter={"iteration": [self._policy_iteration]}
         for _ in range(self.update_epochs):
             for _ in range(n_minibatches):
                 minibatch = self._rollout_buffer.sample(self.minibatch_size, filter)
-                
+
+                ## normalise advantages
+                adv = minibatch["advantages"]
+                minibatch["advantages"] = (adv - adv.mean())/(adv.std() + 1e-3)
+
+                ## compute loss
                 loss, stats = self._ppo_loss(minibatch)
+
+                ## update / clip gradients  
                 self.optimizer.zero_grad()
                 loss.backward()
                 torch.nn.utils.clip_grad_norm_(self.actor.parameters(), self.max_grad_norm)
                 self.optimizer.step()
+
                 all_stats.append(stats)
             
         
@@ -196,22 +204,21 @@ class PPOAgent:
 
         # ---------------- Problem 1.4.2: KL Divergence Policy Loss ----------------
         ### BEGIN STUDENT SOLUTION - 1.4.2 ###
-        ratio = torch.exp(log_probs - old_log_probs)
-        kl = (old_log_probs - log_probs).mean()
-        policy_loss = -(ratio * advantages).mean() + self.beta * kl
-        ### END STUDENT SOLUTION - 1.4.2 ###
-        
-        # ---------------- Problem 1.1.1: PPO Clipped Surrogate Objective Loss ----------------
-        ### BEGIN STUDENT SOLUTION - 1.1.1 ###
         old_log_probs = old_log_probs.squeeze(-1)
         log_probs = log_probs.squeeze(-1)
         advantages = advantages.squeeze(-1)
         assert log_probs.shape == old_log_probs.shape == advantages.shape, f"Screwed up shapes - \
             old_log_probs: {old_log_probs.shape}, log_probs: {log_probs.shape}, advantages: {advantages.shape}"
-        
+
         ratio = torch.exp(log_probs - old_log_probs)
-        clipped_adv = ratio.clamp(1 - eps, 1 + eps) * advantages
-        policy_loss = torch.minimum(ratio * advantages, clipped_adv).mean()
+        kl = (old_log_probs - log_probs).mean()
+        policy_loss = (ratio * advantages).mean() - self.beta * kl
+        ### END STUDENT SOLUTION - 1.4.2 ###
+        
+        # ---------------- Problem 1.1.1: PPO Clipped Surrogate Objective Loss ----------------
+        ### BEGIN STUDENT SOLUTION - 1.1.1 ###
+        # clipped_adv = ratio.clamp(1 - eps, 1 + eps) * advantages
+        # policy_loss = torch.min(ratio * advantages, clipped_adv).mean()
         ### END STUDENT SOLUTION - 1.1.1 ###
         
         
