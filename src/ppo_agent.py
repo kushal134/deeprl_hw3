@@ -76,6 +76,19 @@ class PPOAgent:
         # ---------------- Problem 1.3.1: PPO Update ----------------
         ### BEGIN STUDENT SOLUTION - 1.3.1 ###
 
+        if stop:
+            advantages, returns = self._compute_gae(self._curr_policy_rollout)
+            self._curr_policy_rollout = [] # reset
+
+            batch = self._prepare_batch(advantages, returns)
+            self._rollout_buffer.add_batch(batch)
+
+
+            if self._steps_collected_with_curr_policy >= self.rollout_steps:
+                ret = self._perform_update() # return ret is so comp programming coded
+                self._steps_collected_with_curr_policy = 0
+                self._policy_iteration += 1
+
         ### END STUDENT SOLUTION - 1.3.1 ###
 
         return ret  # Leave this as an empty dictionary if no update is performed
@@ -86,12 +99,24 @@ class PPOAgent:
         all_stats = []
 
         # To log metrics correctly, make sure you have the following lines in this function
-        # loss, stats = self._ppo_loss(minibatch)
-        # all_stats.append(stats)
+
         
         # ---------------- Problem 1.3.2: PPO Update ----------------
         ### BEGIN STUDENT SOLUTION - 1.3.2 ###
-
+        n_minibatches = self.rollout_steps/self.minibatch_size
+        filter={"iteration": [self._policy_iteration]}
+        for _ in range(self.update_epochs):
+            for _ in range(n_minibatches):
+                minibatch = self._rollout_buffer.sample(self.minibatch_size, filter)
+                
+                loss, stats = self._ppo_loss(minibatch)
+                self.optimizer.zero_grad()
+                loss.backward()
+                torch.nn.utils.clip_grad_norm_(self.actor.parameters(), self.max_grad_norm)
+                self.optimizer.step()
+                all_stats.append(stats)
+            
+        
         ### EXPERIMENT 1.6 CODE ###
 
         ### EXPERIMENT 1.6 CODE END ###
