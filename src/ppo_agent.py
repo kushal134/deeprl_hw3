@@ -100,12 +100,12 @@ class PPOAgent:
         
         # ---------------- Problem 1.4.2: KL Divergence Beta Update ----------------
         ### BEGIN STUDENT SOLUTION - 1.4.2 ###
-        d_targ = self.target_kl
-        kl_approx = stats[kl_approx].mean().item()
-        if kl_approx < d_targ/1.5:
-            self.beta = self.beta/2
-        elif kl_approx > d_targ*1.5:
-            self.beta = 2*self.beta
+        # d_targ = self.target_kl
+        # kl_approx = stats[kl_approx].mean().item()
+        # if kl_approx < d_targ/1.5:
+        #     self.beta = self.beta/2
+        # elif kl_approx > d_targ*1.5:
+        #     self.beta = 2*self.beta
             
         ### END STUDENT SOLUTION - 1.4.2 ###
         
@@ -163,8 +163,6 @@ class PPOAgent:
 
         # klpen_loss = (torch.exp(log_probs - old_log_probs)*advantages - self.beta*kl_approx).mean()
 
-        
-        
         ### END STUDENT SOLUTION - 1.4.2 ###
         
         # ---------------- Problem 1.1.1: PPO Clipped Surrogate Objective Loss ----------------
