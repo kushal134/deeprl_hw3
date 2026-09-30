@@ -104,7 +104,7 @@ class PPOAgent:
         # ---------------- Problem 1.3.2: PPO Update ----------------
         ### BEGIN STUDENT SOLUTION - 1.3.2 ###
         batch = self._rollout_buffer.sample(
-            filter={"iteration": [self._policy_iteration]}
+            num_samples=self._steps_collected_with_curr_policy
         )
         n_samples = batch["obs"].shape[0]
 
