@@ -123,8 +123,6 @@ class PPOAgent:
                 self.optimizer.step()
 
                 all_stats.append(stats)
-            
-        
         ### EXPERIMENT 1.6 CODE ###
 
         ### EXPERIMENT 1.6 CODE END ###
@@ -204,14 +202,15 @@ class PPOAgent:
 
         # ---------------- Problem 1.4.2: KL Divergence Policy Loss ----------------
         ### BEGIN STUDENT SOLUTION - 1.4.2 ###
-        old_log_probs = old_log_probs.squeeze(-1)
-        log_probs = log_probs.squeeze(-1)
-        advantages = advantages.squeeze(-1)
+        if old_log_probs.ndim > 1:  old_log_probs = old_log_probs.squeeze(-1)
+        if log_probs.ndim > 1:  log_probs = log_probs.squeeze(-1)
+        if advantages.ndim > 1:  advantages = advantages.squeeze(-1)
         assert log_probs.shape == old_log_probs.shape == advantages.shape, f"Screwed up shapes - \
             old_log_probs: {old_log_probs.shape}, log_probs: {log_probs.shape}, advantages: {advantages.shape}"
 
         ratio = torch.exp(log_probs - old_log_probs)
-        kl = (old_log_probs - log_probs).mean()
+
+        # kl = (old_log_probs - log_probs).mean()
         # policy_loss = (ratio * advantages).mean() - self.beta * kl
         ### END STUDENT SOLUTION - 1.4.2 ###
         
@@ -233,6 +232,10 @@ class PPOAgent:
         ### BEGIN STUDENT SOLUTION - 1.1.2 ###
         value_preds = values.squeeze(-1)
         value_targets = returns.squeeze(-1)
+
+        if value_preds.ndim > 1:  value_preds = value_preds.squeeze(-1)
+        if value_targets.ndim > 1:  value_targets = value_targets.squeeze(-1)
+
         assert value_preds.shape == value_targets.shape, f"Screwed up shapes - \
             value_preds: {value_preds.shape}, value_targets: {value_targets.shape}"
 
