@@ -108,6 +108,11 @@ class PPOAgent:
         )
         n_samples = batch["obs"].shape[0]
 
+        adv = batch["advantages"]
+        batch["advantages"] = (
+            (adv - adv.mean()) / (adv.std(unbiased=False) + 1e-8)
+        ) # Normalize for stability!
+
         for _ in range(self.update_epochs):
             indices = torch.randperm(n_samples, device=self.device) # Randomize over samples
 
