@@ -103,25 +103,30 @@ class PPOAgent:
         
         # ---------------- Problem 1.3.2: PPO Update ----------------
         ### BEGIN STUDENT SOLUTION - 1.3.2 ###
-        n_minibatches = self.rollout_steps//self.minibatch_size
-        filter={"iteration": [self._policy_iteration]}
+        batch = self._rollout_buffer.sample(
+            filter={"iteration": [self._policy_iteration]}
+        )
+        n_samples = batch["obs"].shape[0]
+
         for _ in range(self.update_epochs):
-            for _ in range(n_minibatches):
-                minibatch = self._rollout_buffer.sample(self.minibatch_size, filter)
+            indices = torch.randperm(n_samples, device=self.device) # Randomize over samples
 
-                ## normalise advantages
-                adv = minibatch["advantages"]
-                minibatch["advantages"] = (adv - adv.mean())/(adv.std() + 1e-3)
+            for start in range(0, n_samples, self.minibatch_size):
+                minibatch_indices = indices[start:start + self.minibatch_size]
+                minibatch = {
+                    key: tensor[minibatch_indices] for key, tensor in batch.items()
+                }
 
-                ## compute loss
                 loss, stats = self._ppo_loss(minibatch)
-
-                ## update / clip gradients  
                 self.optimizer.zero_grad()
                 loss.backward()
-                torch.nn.utils.clip_grad_norm_(self.actor.parameters(), self.max_grad_norm)
-                self.optimizer.step()
 
+                torch.nn.utils.clip_grad_norm_(
+                    self.actor.parameters(),
+                    self.max_grad_norm,
+                )
+
+                self.optimizer.step()
                 all_stats.append(stats)
         ### EXPERIMENT 1.6 CODE ###
 
