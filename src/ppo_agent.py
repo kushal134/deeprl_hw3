@@ -103,9 +103,24 @@ class PPOAgent:
         
         # ---------------- Problem 1.3.2: PPO Update ----------------
         ### BEGIN STUDENT SOLUTION - 1.3.2 ###
-        batch = self._rollout_buffer.sample(
-            num_samples=self._steps_collected_with_curr_policy
+        total_samples = self._steps_collected_with_curr_policy
+        half_num_samples, other_half_num_samples = \
+            total_samples // 2, total_samples - (total_samples // 2)
+
+        current_batch = self._rollout_buffer.sample(
+            num_samples=half_num_samples,
+            filter={"iteration": [self._policy_iteration]},
         )
+        full_batch = self._rollout_buffer.sample(num_samples=other_half_num_samples)
+        """
+        Here, we assume that since sampling is IID it is permissible to have repeated 
+        transitions bteween current_batch and full_batch.
+        """
+
+        batch = {
+            key: torch.cat([current_batch[key], full_batch[key]], dim=0)
+            for key in current_batch
+        }
         n_samples = batch["obs"].shape[0]
 
         adv = batch["advantages"]
