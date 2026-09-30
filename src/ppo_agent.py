@@ -212,13 +212,13 @@ class PPOAgent:
 
         ratio = torch.exp(log_probs - old_log_probs)
         kl = (old_log_probs - log_probs).mean()
-        policy_loss = (ratio * advantages).mean() - self.beta * kl
+        # policy_loss = (ratio * advantages).mean() - self.beta * kl
         ### END STUDENT SOLUTION - 1.4.2 ###
         
         # ---------------- Problem 1.1.1: PPO Clipped Surrogate Objective Loss ----------------
         ### BEGIN STUDENT SOLUTION - 1.1.1 ###
-        # clipped_adv = ratio.clamp(1 - eps, 1 + eps) * advantages
-        # policy_loss = torch.min(ratio * advantages, clipped_adv).mean()
+        clipped_adv = ratio.clamp(1 - eps, 1 + eps) * advantages
+        policy_loss = torch.min(ratio * advantages, clipped_adv).mean()
         ### END STUDENT SOLUTION - 1.1.1 ###
         
         
@@ -255,7 +255,7 @@ class PPOAgent:
             "loss": float(total_loss.item()),
             "policy_loss": float(policy_loss.item()),
             "value_loss": float(value_loss.item()),
-            "entropy": float(-entropy_loss.item()),
+            "entropy": float(entropy_loss.item()),
             "kl": float(approx_kl.item()),
             "clipfrac": float(clipfrac.item()),
         }
