@@ -2,3 +2,7 @@
 __pycache__
 *.pt
 .DS_Store
+*.sh
+*.txt
+console.log
+code/
