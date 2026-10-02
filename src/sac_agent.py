@@ -236,8 +236,8 @@ class SACAgent:
         # ---------------- Problem 3.1.5: Target soft-updates ---------------
         ### BEGIN STUDENT SOLUTION - 3.1.5 ###
         ## only soft update both critic target networks
-        self._soft_update(local_model=self.critic1, target_model=self.critic1_target)
-        self._soft_update(local_model=self.critic2, target_model=self.critic2_target)
+        self._soft_update(self.critic1, self.target_critic1)
+        self._soft_update(self.critic2, self.target_critic2)
         ### END STUDENT SOLUTION  -  3.1.5 ###
         
         # Return stats in format expected by runner
