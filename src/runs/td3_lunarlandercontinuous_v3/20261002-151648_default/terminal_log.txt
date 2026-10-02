@@ -1,0 +1,181 @@
+============================================================
+TD3 Training Configuration
+============================================================
+agent               : td3
+alpha               : 0.2
+batch_size          : 128
+buffer_size         : 100000
+clip_coef           : 0.2
+cpu                 : True
+delay               : 2
+ent_coef            : 0.01
+env_id              : LunarLanderContinuous-v3
+eval_episodes       : 100
+eval_every          : 50000
+exploration_noise   : 0.1
+gae_lambda          : 0.98
+gamma               : 0.99
+log_every           : 10000
+lr                  : 0.0003
+max_grad_norm       : 0.5
+minibatch_size      : 128
+noise_clip          : 0.5
+out_dir             : runs/td3_lunarlandercontinuous_v3/20261002-151648
+plot_every          : 1000
+policy_noise        : 0.2
+rollout_steps       : 4096
+seed                : 42000
+tau                 : 0.005
+total_steps         : 500000
+update_epochs       : 10
+update_every        : 1
+utd_ratio           : 1
+vf_coef             : 0.5
+video_dir           : runs/td3_lunarlandercontinuous_v3/20261002-151648/videos
+video_every         : 100000
+video_prefix        : eval
+warmup_steps        : 5000
+============================================================
+Using device: cpu
+Environment: LunarLanderContinuous-v3
+Obs dim: 8, Action dim: 2
+Created TD3 agent
+Starting TD3 training...
+Target steps: 500000
+Batch size: 128
+Update every: 1
+Buffer size: 100000
+Warmup steps: 5000
+--------------------------------------------------
+/home/arnav/hw3/deeprl_hw3/src/utils.py:279: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+  axes[0, 2].legend()
+/home/arnav/hw3/deeprl_hw3/src/utils.py:301: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+  axes[1, 0].legend()
+[Step    10000] Updates: 5001 | Actor:  0.0000 | C1: 10.9475 | C2: 11.1065 | Q1:  -14.70 | Q2:  -14.79 | Ret:  -182.7
+[Step    20000] Updates: 15001 | Actor:  0.0000 | C1:  3.0336 | C2:  3.4779 | Q1:  -22.47 | Q2:  -22.46 | Ret:  -176.9
+[Step    30000] Updates: 25001 | Actor:  0.0000 | C1: 13.7015 | C2: 11.5409 | Q1:  -29.01 | Q2:  -28.92 | Ret:  -135.4
+[Step    40000] Updates: 35001 | Actor:  0.0000 | C1:  2.1801 | C2:  1.8803 | Q1:  -33.56 | Q2:  -33.54 | Ret:   -67.6
+[Step    50000] Updates: 45001 | Actor:  0.0000 | C1:  8.4162 | C2:  5.4816 | Q1:  -34.71 | Q2:  -34.60 | Ret:   -95.7
+
+--- Evaluation at step 50000 ---
+Eval: -196.9 ± 106.7
+New best model saved! Return: -196.9
+--- End Evaluation ---
+
+[Step    60000] Updates: 55001 | Actor:  0.0000 | C1:  3.4287 | C2:  3.0474 | Q1:  -41.09 | Q2:  -41.11 | Ret:  -232.8
+[Step    70000] Updates: 65001 | Actor:  0.0000 | C1:  2.9308 | C2:  2.6320 | Q1:  -47.93 | Q2:  -47.85 | Ret:  -218.8
+[Step    80000] Updates: 75001 | Actor:  0.0000 | C1:  6.9244 | C2:  5.2737 | Q1:  -51.25 | Q2:  -51.03 | Ret:    10.6
+[Step    90000] Updates: 85001 | Actor:  0.0000 | C1:  3.4632 | C2:  3.8520 | Q1:  -33.55 | Q2:  -33.51 | Ret:    80.2
+[Step   100000] Updates: 95001 | Actor:  0.0000 | C1:  7.7233 | C2:  8.3173 | Q1:  -24.43 | Q2:  -24.45 | Ret:    -1.0
+
+--- Evaluation at step 100000 ---
+Eval: -75.4 ± 165.3
+New best model saved! Return: -75.4
+--- End Evaluation ---
+
+Recording video at step 100000...
+/home/arnav/hw2/deeprl_hw2/venv/lib/python3.12/site-packages/gymnasium/wrappers/rendering.py:292: UserWarning: WARN: Overwriting existing videos at /home/arnav/hw3/deeprl_hw3/src/runs/td3_lunarlandercontinuous_v3/20261002-151648/videos folder (try specifying a different `video_folder` for the `RecordVideo` wrapper if this isnot desired)
+  logger.warn(
+Video saved: runs/td3_lunarlandercontinuous_v3/20261002-151648/videos/eval_t100000-episode-0.mp4
+[Step   110000] Updates: 105001 | Actor:  0.0000 | C1:  2.6958 | C2:  1.9194 | Q1:  -11.20 | Q2:  -11.32 | Ret:   -54.4
+[Step   120000] Updates: 115001 | Actor:  0.0000 | C1: 12.2460 | C2: 11.6986 | Q1:  -14.16 | Q2:  -14.03 | Ret:    20.1
+[Step   130000] Updates: 125001 | Actor:  0.0000 | C1:  7.0687 | C2:  6.6689 | Q1:   -7.90 | Q2:   -7.91 | Ret:   141.7
+[Step   140000] Updates: 135001 | Actor:  0.0000 | C1:  3.0940 | C2:  2.7031 | Q1:   -7.26 | Q2:   -7.34 | Ret:   -76.3
+[Step   150000] Updates: 145001 | Actor:  0.0000 | C1:  1.5843 | C2:  1.6725 | Q1:   -2.21 | Q2:   -2.04 | Ret:    12.8
+
+--- Evaluation at step 150000 ---
+Eval: 49.3 ± 156.7
+New best model saved! Return: 49.3
+--- End Evaluation ---
+
+[Step   160000] Updates: 155001 | Actor:  0.0000 | C1:  1.4413 | C2:  1.7526 | Q1:   -5.05 | Q2:   -4.71 | Ret:   125.6
+[Step   170000] Updates: 165001 | Actor:  0.0000 | C1: 53.8785 | C2: 55.2068 | Q1:    2.30 | Q2:    2.32 | Ret:  -103.2
+[Step   180000] Updates: 175001 | Actor:  0.0000 | C1:  3.8279 | C2:  3.2457 | Q1:    8.20 | Q2:    8.31 | Ret:   107.5
+[Step   190000] Updates: 185001 | Actor:  0.0000 | C1:  1.6009 | C2:  2.0460 | Q1:   14.60 | Q2:   14.71 | Ret:   184.6
+[Step   200000] Updates: 195001 | Actor:  0.0000 | C1:  3.2415 | C2:  4.5527 | Q1:   18.15 | Q2:   18.13 | Ret:   164.1
+
+--- Evaluation at step 200000 ---
+Eval: 167.7 ± 104.2
+New best model saved! Return: 167.7
+--- End Evaluation ---
+
+Recording video at step 200000...
+Video saved: runs/td3_lunarlandercontinuous_v3/20261002-151648/videos/eval_t200000-episode-0.mp4
+[Step   210000] Updates: 205001 | Actor:  0.0000 | C1:  4.5903 | C2:  4.2985 | Q1:   13.23 | Q2:   13.16 | Ret:   189.8
+[Step   220000] Updates: 215001 | Actor:  0.0000 | C1:  1.9149 | C2:  1.6481 | Q1:   15.55 | Q2:   15.57 | Ret:   168.3
+[Step   230000] Updates: 225001 | Actor:  0.0000 | C1:  1.8418 | C2:  1.9880 | Q1:   14.42 | Q2:   14.31 | Ret:   189.0
+[Step   240000] Updates: 235001 | Actor:  0.0000 | C1:  9.4237 | C2:  8.2877 | Q1:   18.92 | Q2:   19.00 | Ret:   231.7
+[Step   250000] Updates: 245001 | Actor:  0.0000 | C1:  2.6887 | C2:  2.6705 | Q1:   24.31 | Q2:   24.50 | Ret:   192.5
+
+--- Evaluation at step 250000 ---
+Eval: 156.0 ± 118.9
+--- End Evaluation ---
+
+[Step   260000] Updates: 255001 | Actor:  0.0000 | C1: 14.3486 | C2: 14.4261 | Q1:   28.20 | Q2:   28.20 | Ret:   267.5
+[Step   270000] Updates: 265001 | Actor:  0.0000 | C1:  3.3170 | C2:  2.5983 | Q1:   31.81 | Q2:   31.93 | Ret:   180.9
+[Step   280000] Updates: 275001 | Actor:  0.0000 | C1: 19.4336 | C2: 18.9520 | Q1:   33.64 | Q2:   33.51 | Ret:   237.4
+[Step   290000] Updates: 285001 | Actor:  0.0000 | C1:  5.3452 | C2:  4.2837 | Q1:   30.87 | Q2:   30.52 | Ret:   231.9
+[Step   300000] Updates: 295001 | Actor:  0.0000 | C1:  6.7651 | C2:  6.9537 | Q1:   38.39 | Q2:   38.72 | Ret:   255.2
+
+--- Evaluation at step 300000 ---
+Eval: 249.0 ± 25.8
+New best model saved! Return: 249.0
+--- End Evaluation ---
+
+Recording video at step 300000...
+Video saved: runs/td3_lunarlandercontinuous_v3/20261002-151648/videos/eval_t300000-episode-0.mp4
+[Step   310000] Updates: 305001 | Actor:  0.0000 | C1:  1.7870 | C2:  1.7901 | Q1:   39.42 | Q2:   39.65 | Ret:   218.6
+[Step   320000] Updates: 315001 | Actor:  0.0000 | C1: 34.8039 | C2: 35.0259 | Q1:   42.28 | Q2:   42.19 | Ret:   205.1
+[Step   330000] Updates: 325001 | Actor:  0.0000 | C1:  2.4583 | C2:  2.3474 | Q1:   42.01 | Q2:   42.08 | Ret:   149.2
+[Step   340000] Updates: 335001 | Actor:  0.0000 | C1: 10.2598 | C2: 10.1458 | Q1:   44.78 | Q2:   44.46 | Ret:   244.1
+[Step   350000] Updates: 345001 | Actor:  0.0000 | C1:  6.9912 | C2:  6.4481 | Q1:   36.87 | Q2:   36.85 | Ret:   256.3
+
+--- Evaluation at step 350000 ---
+Eval: 258.1 ± 34.6
+New best model saved! Return: 258.1
+--- End Evaluation ---
+
+[Step   360000] Updates: 355001 | Actor:  0.0000 | C1:  2.5456 | C2:  2.1685 | Q1:   44.26 | Q2:   44.05 | Ret:   236.2
+[Step   370000] Updates: 365001 | Actor:  0.0000 | C1:  2.6387 | C2:  2.8415 | Q1:   43.28 | Q2:   43.34 | Ret:   170.0
+[Step   380000] Updates: 375001 | Actor:  0.0000 | C1:  5.5570 | C2:  5.8543 | Q1:   49.59 | Q2:   49.48 | Ret:   221.0
+[Step   390000] Updates: 385001 | Actor:  0.0000 | C1:  1.4954 | C2:  1.6737 | Q1:   53.76 | Q2:   53.66 | Ret:   236.3
+[Step   400000] Updates: 395001 | Actor:  0.0000 | C1:  3.2301 | C2:  3.0366 | Q1:   49.48 | Q2:   49.35 | Ret:   259.0
+
+--- Evaluation at step 400000 ---
+Eval: 274.2 ± 18.6
+New best model saved! Return: 274.2
+--- End Evaluation ---
+
+Recording video at step 400000...
+Video saved: runs/td3_lunarlandercontinuous_v3/20261002-151648/videos/eval_t400000-episode-0.mp4
+[Step   410000] Updates: 405001 | Actor:  0.0000 | C1:  7.4398 | C2:  8.1325 | Q1:   54.83 | Q2:   54.93 | Ret:   268.2
+[Step   420000] Updates: 415001 | Actor:  0.0000 | C1: 10.0149 | C2:  8.9988 | Q1:   53.90 | Q2:   53.86 | Ret:   280.0
+[Step   430000] Updates: 425001 | Actor:  0.0000 | C1:  8.7067 | C2:  6.3062 | Q1:   55.88 | Q2:   56.31 | Ret:   274.2
+[Step   440000] Updates: 435001 | Actor:  0.0000 | C1: 33.5363 | C2: 33.7410 | Q1:   58.96 | Q2:   59.07 | Ret:   269.3
+[Step   450000] Updates: 445001 | Actor:  0.0000 | C1:  2.6152 | C2:  1.9925 | Q1:   61.79 | Q2:   62.08 | Ret:   275.0
+
+--- Evaluation at step 450000 ---
+Eval: 272.0 ± 20.3
+--- End Evaluation ---
+
+[Step   460000] Updates: 455001 | Actor:  0.0000 | C1:  3.8141 | C2:  4.6884 | Q1:   62.07 | Q2:   62.01 | Ret:   265.5
+[Step   470000] Updates: 465001 | Actor:  0.0000 | C1: 35.8174 | C2: 35.2582 | Q1:   61.31 | Q2:   61.31 | Ret:   274.8
+[Step   480000] Updates: 475001 | Actor:  0.0000 | C1:  8.1830 | C2:  7.3583 | Q1:   64.43 | Q2:   64.49 | Ret:   257.6
+[Step   490000] Updates: 485001 | Actor:  0.0000 | C1:  3.4989 | C2:  2.3230 | Q1:   66.03 | Q2:   66.19 | Ret:   270.7
+[Step   500000] Updates: 495001 | Actor:  0.0000 | C1:  3.6536 | C2:  3.8513 | Q1:   74.25 | Q2:   74.53 | Ret:   263.4
+
+--- Evaluation at step 500000 ---
+Eval: 266.5 ± 47.0
+--- End Evaluation ---
+
+Recording video at step 500000...
+Video saved: runs/td3_lunarlandercontinuous_v3/20261002-151648/videos/eval_t500000-episode-0.mp4
+
+Training completed! Total steps: 500000
+Total TD3 updates: 495001
+Loaded best model from runs/td3_lunarlandercontinuous_v3/20261002-151648/best.pt for final evaluation
+Final evaluation...
+Final performance: 275.3 ± 18.8
+Final training curves saved: runs/td3_lunarlandercontinuous_v3/20261002-151648/training_curves.png
+Final model saved: runs/td3_lunarlandercontinuous_v3/20261002-151648/final.pt
+Training log saved: runs/td3_lunarlandercontinuous_v3/20261002-151648/training_log.json

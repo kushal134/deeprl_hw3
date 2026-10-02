@@ -178,5 +178,5 @@ class SACAgent:
         """Soft update target network parameters"""
         # ---------------- Problem 3.1.5 Helper: Soft update implementation ----------------
         ### BEGIN STUDENT SOLUTION - 3.1.5 HELPER ###
-
+        
         ### END STUDENT SOLUTION  -  3.1.5 HELPER ###
