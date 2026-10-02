@@ -39,7 +39,39 @@ class TD3Agent:
         
         # ================== Problem 2.1.1: TD3 initialization ==================
         ### BEGIN STUDENT SOLUTION - 2.1.1 ###
+        def initialize_actor():
+            return Actor(
+                obs_dim = self.obs_dim,
+                act_dim = self.act_dim,
+                act_low = self.act_low,
+                act_high = self.act_high,
+                hidden = (64,64),
+            ).to(self.device)
+
+        def initialize_critic():
+            return Critic(
+                obs_dim = self.obs_dim,
+                act_dim = self.act_dim,
+                hidden = (64,64)
+            ).to(self.device)
+
+        # have to initialize online and target for actor, critic 1 and critic 2 ...
         
+        self.actor = initialize_actor()
+        self.critic1 = initialize_critic()
+        self.critic2 = initialize_critic()
+        self.actor_target = initialize_actor()
+        self.critic1_target = initialize_critic()
+        self.critic2_target = initialize_critic()
+        self.actor_target.load_state_dict(self.actor.state_dict())
+        self.critic1_target.load_state_dict(self.critic1.state_dict())
+        self.critic2_target.load_state_dict(self.critic2.state_dict())
+        
+        # targets are only updated via Polyak avgs not the gradients ig
+        for net in (self.actor_target, self.critic1_target, self.critic2_target):
+            for p in net.parameters():
+                p.requires_grad_(False)
+
         ### END STUDENT SOLUTION  -  2.1.1 ###
         
         # Optimizers
@@ -67,7 +99,11 @@ class TD3Agent:
             
             # ---------------- Problem 2.2: Exploration noise at action time ----------------
             ### BEGIN STUDENT SOLUTION - 2.2 ###
-
+            ## NEED TO CHECK MEAN ACTIO 
+            action_det = self.actor(obs_t).mean_action
+            action = action_det + torch.randn_like(action_det)*self.exploration_noise
+            action = torch.clamp(action, self.act_low, self.act_high)
+            
             ### END STUDENT SOLUTION  -  2.2 ###
             
             return {
@@ -101,7 +137,8 @@ class TD3Agent:
         
         # ---------------- Problem 2.4: Exploration noise at action time ----------------
         ### BEGIN STUDENT SOLUTION - 2.4 ###
-
+        if self._buffer.size < max(self.warmup_steps, self.batch_size) or self.total_steps % self.update_every != 0:
+            return {}
         ### END STUDENT SOLUTION - 2.4 ###
         
         # Perform TD3 updates
@@ -121,7 +158,12 @@ class TD3Agent:
             
             # ---------------- Problem 2.3: Delayed policy updates ----------------
             ### BEGIN STUDENT SOLUTION - 2.3 ###
-
+            ## increase the update count to maintain a counter for the delayed actor update
+            self._update_count += 1
+            do_actor_update = False
+            if self._update_count % self.policy_delay == 0:
+                do_actor_update = True
+            stats = self._td3_update_step(batch, do_actor_update)
             ### END STUDENT SOLUTION  -  2.3 ###
             all_stats.append(stats)
         
@@ -146,17 +188,61 @@ class TD3Agent:
         
         # ---------------- Problem 2.1.2: TD3 target with policy smoothing ----------------
         ### BEGIN STUDENT SOLUTION - 2.1.2 ###
-       
+        with torch.no_grad():
+            # smoothing out the target policy
+            mean_action = self.actor_target(next_obs).mean_action
+            noise = (torch.randn_like(mean_action) * self.policy_noise).clamp(-self.noise_clip, self.noise_clip)
+            next_action = torch.clamp(mean_action + noise, self.act_low, self.act_high)
+
+            # find elementwise min of the two target critic networks
+            target_critic1 = self.critic1_target(next_obs, next_action).squeeze(-1)
+            target_critic2 = self.critic2_target(next_obs, next_action).squeeze(-1)
+            
+            rewards = rewards.view(-1)
+            dones = dones.view(-1)
+
+            min_target_q = torch.min(target_critic1, target_critic2)
+            not_dones = 1.0 - dones
+
+            # find bellman target now
+            target_q = rewards + self.gamma * not_dones * min_target_q
         ### END STUDENT SOLUTION  -  2.1.2 ###
         
         # ---------------- Problem 2.1.3: Critic update ----------------
         ### BEGIN STUDENT SOLUTION - 2.1.3 ###
 
+        current_q1 = self.critic1(obs, actions).squeeze(-1)
+        current_q2 = self.critic2(obs, actions).squeeze(-1)
+
+        # sum up both the critics' losses
+        critic1_loss = nn.functional.mse_loss(current_q1, target_q)
+        critic2_loss = nn.functional.mse_loss(current_q2, target_q)
+        critic_loss = critic1_loss + critic2_loss
+
+        # now perform step
+        self.critic_opt.zero_grad()
+        critic_loss.backward()
+        self.critic_opt.step()
+
         ### END STUDENT SOLUTION  -  2.1.3 ###
         
         # ---------------- Problem 2.1.4: Actor update (delayed) ----------------
         ### BEGIN STUDENT SOLUTION - 2.1.4 ###
-       
+
+        if do_actor_update:
+            actor_action = self.actor(obs).mean_action # get the deterministic action from the actor
+            actor_loss = -self.critic1(obs, actor_action).mean()
+
+            # perform step
+            self.actor_opt.zero_grad()
+            actor_loss.backward()
+            self.actor_opt.step()
+            
+            # we have to update the target networks now using soft updates
+            self._soft_update(self.actor, self.actor_target)
+            self._soft_update(self.critic1, self.critic1_target)
+            self._soft_update(self.critic2, self.critic2_target)
+
         ### END STUDENT SOLUTION  -  2.1.4 ###
         
         # Return stats in format expected by runner
@@ -172,5 +258,8 @@ class TD3Agent:
         """Soft update target network parameters using Polyak averaging"""
         # ---------------- Problem 2.1.5: Polyak averaging ----------------
         ### BEGIN STUDENT SOLUTION - 2.1.5 ###
-
+       
+        with torch.no_grad():
+            for local_params, target_params in zip(local_model.parameters(), target_model.parameters()):
+                target_params.copy_((1-self.tau)*target_params + self.tau*local_params)
         ### END STUDENT SOLUTION  -  2.1.5 ###
