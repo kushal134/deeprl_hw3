@@ -244,7 +244,6 @@ class TD3Agent:
             self._soft_update(self.critic2, self.critic2_target)
 
         ### END STUDENT SOLUTION  -  2.1.4 ###
-        
         # Return stats in format expected by runner
         return {
             "actor_loss": float(actor_loss.item()),
