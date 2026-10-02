@@ -94,7 +94,7 @@ assignment may not be graded correctly, and points may be deducted from your ass
 \hspace{1.5em}\textbf{Fill in the blank:} What is the course number?
 
 \hspace{1.5em}\inlinebox{3cm}{%
-% YOUR SOLUTION HERE
+10-703
 }
 
 \clearpage
@@ -110,19 +110,19 @@ may lose points on your assignment.
 \renewcommand{\arraystretch}{1.9}
 \begin{tabular}{@{}l@{\ }l@{\quad}l@{\ }l@{}}
 Name 1: & \inlinebox{3.6cm}{%
-% YOUR SOLUTION HERE
+Arnav Goyal
 } & Andrew ID 1: & \inlinebox{3.6cm}{%
-% YOUR SOLUTION HERE
+arnavgoy
 } \\
 Name 2: & \inlinebox{3.6cm}{%
-% YOUR SOLUTION HERE
+Kushal Kejriwal
 } & Andrew ID 2: & \inlinebox{3.6cm}{%
-% YOUR SOLUTION HERE
+kkejriwa
 } \\
 Name 3: & \inlinebox{3.6cm}{%
-% YOUR SOLUTION HERE
+Vineeth Bhat
 } & Andrew ID 3: & \inlinebox{3.6cm}{%
-% YOUR SOLUTION HERE
+vineethb
 } \\
 \end{tabular}
 \renewcommand{\arraystretch}{1}
@@ -140,87 +140,111 @@ written component.
 \boxlabel{Plots}
 \begin{answerbox}{10cm}
 % TODO: Put your figures, e.g.
-% \includegraphics[width=\linewidth,height=9.3cm,keepaspectratio]{figures/ppo_clip.png}
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/ppo_images/1.4.1_training_curves.png}
 % YOUR SOLUTION HERE
 \end{answerbox}
 \boxlabel{Final performance}
 \begin{answerbox}{2.5cm}
-% YOUR SOLUTION HERE
+\emph{Training:} Ending MA(50) = $142.3$. Training returns (max/mean/min): all episodes $291.1/-56.5/-619.4$; last 50 $271.9/142.3/-20.4$ (SD $51.5$). \textbf{Note}: $\text{Max} > 200$.\par
+\emph{Evaluation:} Best checkpoint, deterministic actions: $214.9\pm 65.4$ (mean $\pm$ SD).\par
 \end{answerbox}
 
 \clearpage
 \subproblem{1.4.2 KL-Penalized Objective}{\ptsKL}
 \boxlabel{Plots}
 \begin{answerbox}{9cm}
-% YOUR SOLUTION HERE
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/ppo_images/1.4.2_training_curves.png}
 \end{answerbox}
 \boxlabel{Final performance}
 \begin{answerbox}{2cm}
-% YOUR SOLUTION HERE
+\emph{Training:} Ending MA(50) = $-104.5$. Training returns (max/mean/min): all episodes $264.5/-74.5/-698.4$; last 50 $18.6/-104.5/-239.7$ (SD $54.2$).\par
+\emph{Evaluation:} Best checkpoint, deterministic actions: $240.1\pm 70.9$ (mean $\pm$ SD).\par
 \end{answerbox}
 \boxlabel{Reflection: clipping vs.\ KL penalty}
 \begin{answerbox}{6.5cm}
-% YOUR SOLUTION HERE
+Clipping in our trial was more stable in terms of avoiding large KL divergences and large loss spikes. The KL run had a late KL spike above $0.5$, as well as sharp increases in policy and value losses while clipping remained relatively stabler.  Clipping was also more stable in the sense that it reached a higher MA(50) of $142.3$ while KL later collapsed to $-104.5$. \emph{However,} KL's best checkpoint evaluated better at $240.1$ compared to clipping's $214.9$.
+
+Clipping's adv. are simplicity and fewer large KL and loss spikes and better retention of training performance, while its disadv. is that it only removes incentives for excessive probability changes and does not directly constrain overall policy divergence. The KL penalty explicitly discourages divergence and produced a better best checkpoint in our run, but requires adapting $\beta$. If the penalty is too weak, disruptive updates can occur and if its too strong, learning can slow. \emph{Neither approach guarantees small updates}.
 \end{answerbox}
 
 \clearpage
 \subproblem{1.5.1 High Clipping Threshold ($\epsilon = 0.3$)}{\ptsHighClip}
 \boxlabel{Plots}
 \begin{answerbox}{9cm}
-% YOUR SOLUTION HERE
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/ppo_images/1.5.1_training_curves.png}
 \end{answerbox}
 \boxlabel{Final returns}
 \begin{answerbox}{2cm}
-% YOUR SOLUTION HERE
+\emph{Training:} Ending MA(50) = $245.3$. Training returns (max/mean/min): all episodes $311.5/2.8/-614.8$; last 50 $302.6/245.3/15.3$ (SD $53.9$).\par
+\emph{Evaluation:} Best checkpoint, deterministic actions: $254.2\pm 57.0$ (mean $\pm$ SD).\par
 \end{answerbox}
 \boxlabel{Discussion}
 \begin{answerbox}{6.5cm}
-% YOUR SOLUTION HERE
+With $\epsilon=0.3$, learning was faster than 1.4.1 and the ending MA(50) increased from $142.3$ to $245.3$, and best-checkpoint evaluation increased from $214.9$ to $254.2$. KL was generally around $0.01$, compared with roughly $0.005$ for the 1.4.1, so there were larger policy changes. Lastly, last-50 return SD was similar ($53.9$ versus $51.5$).
+
+For positive advantages, clipping removes the incentive to increase $r_t$ beyond $1+\epsilon$ and for negative advantages, it removes the incentive to decrease $r_t$ below $1-\epsilon$. Larger $\epsilon$ therefore allows stronger changes before clipping comes in, making the realized objective closer to the unclipped policy gradients. 
+
+The trade-off is faster learning versus potentially less stable updates in terms of loss spikes and KL divergences. In our case, the run benefited from the larger threshold while remaining relatively stable.
 \end{answerbox}
 
 \clearpage
 \subproblem{1.5.3 Low Clipping Threshold ($\epsilon = 0.05$)}{\ptsLowClip}
 \boxlabel{Plots}
 \begin{answerbox}{9cm}
-% YOUR SOLUTION HERE
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/ppo_images/1.5.2_training_curves.png}
 \end{answerbox}
 \boxlabel{Final returns}
 \begin{answerbox}{2cm}
-% YOUR SOLUTION HERE
+\emph{Training:} Ending MA(50) = $115.9$. Training returns (max/mean/min): all episodes $260.8/-73.0/-540.8$; last 50 $224.2/115.9/-6.8$ (SD $63.4$).\par
+\emph{Evaluation:} Best checkpoint, deterministic actions: $137.4\pm 115.9$ (mean $\pm$ SD).\par
 \end{answerbox}
 \boxlabel{Discussion}
 \begin{answerbox}{6.5cm}
-% YOUR SOLUTION HERE
+With $\epsilon=0.05$, learning was slower and the ending MA(50) fell to $115.9$ and best-checkpoint evaluation to $137.4$, as compared to the $142.3$ and $214.9$ (resp.) for 1.4.1. After early training, KL was mostly below $0.002$, and the policy objective fluctuated less. This indicates more stable policy updates, but does not directly indicate consistent returns since the last-50 return SD increased from $51.5$ (1.4.1) to $63.4$.
+
+The narrower clipping interval removes incentives for further useful probability changes sooner therefore limiting / slowing down progress. So, smaller updates can improve policy update stability while reducing learning speed and final performance (i.e., with a fixed compute budget). 
+
+In higher-dimensional or more complex environments, conservative updates may help avoid disruption owing to higehr plausibilit for instability. However, excessively tight clipping can still prevent sufficient learning within the available compute budget.
 \end{answerbox}
 
 \clearpage
 \subproblem{1.6.1 Full Off-Policy PPO}{\ptsFullOff}
 \boxlabel{Plots}
 \begin{answerbox}{9cm}
-% YOUR SOLUTION HERE
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/ppo_images/1.6.1_training_curves.png}
 \end{answerbox}
 \boxlabel{Final return}
 \begin{answerbox}{2cm}
-% YOUR SOLUTION HERE
+\emph{Training:} Ending MA(50) = $-6.5$. Training returns (max/mean/min): all episodes $77.3/-82.5/-560.8$; last 50 $41.4/-6.5/-67.9$ (SD $25.1$).\par
+\emph{Evaluation:} Best checkpoint, deterministic actions: $-113.3\pm 81.4$ (mean $\pm$ SD).\par
 \end{answerbox}
 \boxlabel{Discussion}
 \begin{answerbox}{6.5cm}
-% YOUR SOLUTION HERE
+\small{
+Full replay performed worse than 1.4.1 with the ending MA(50) being $-6.5$ as compared to $142.3$, and the best checkpoint evaluation was $-113.3$ while 1.4.1 was $214.9$. Losses decreased relatively smoothly, and last-50 return SD was only $25.1$. However, KL remained around $0.01$ with repeated spikes (higher than $0.05$ in 1.4.1). Therefore, smooth losses and low return variability do not imply good / efficient learning here with same compute budget.
+
+Older trajectories were collected by policies that chose different actions and visited different states. Their stored advantages and value targets may therefore be less relevant to the current policy. The probability ratio accounts for changes in action probabilities at each sampled state, but does not account for how often the current policy visits that state (\textbf{state visitation}). So, replay can direct updates toward states that matter less to the current policy.
+
+Using \emph{more recent trajectories} and recomputing advantages and value targets with some off policy corrections could improve learning.
+}
 \end{answerbox}
 
 \clearpage
 \subproblem{1.6.2 Half Off-Policy PPO}{\ptsHalfOff}
 \boxlabel{Plots}
 \begin{answerbox}{9cm}
-% YOUR SOLUTION HERE
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/ppo_images/1.6.2_training_curves.png}
 \end{answerbox}
 \boxlabel{Final return}
 \begin{answerbox}{2cm}
-% YOUR SOLUTION HERE
+\emph{Training:} Ending MA(50) = $3.3$. Training returns (max/mean/min): all episodes $128.1/-75.4/-543.4$; last 50 $128.1/3.3/-302.1$ (SD $92.9$).\par
+\emph{Evaluation:} Best checkpoint, deterministic actions: $-100.2\pm 55.0$ (mean $\pm$ SD).\par
 \end{answerbox}
 \boxlabel{Discussion}
 \begin{answerbox}{6.5cm}
-% YOUR SOLUTION HERE
+Adding current-policy data modestly improved ending MA(50) from $-6.5$ to $3.3$, and best-checkpoint evaluation, from $-113.3$ to $-100.2$. However, it did not consistently improve stability since the graph shows larger late KL spikes. Last-50 return SD also increased from $25.1$ to $92.9$, with a minimum return of $-302.1$.
+
+Fresh trajectories provide states and advantage estimates that better reflect the current policy, reducing some historical data mismatch and explaining the improved performance (referred to as state visitation in 1.6.1 answer). Replay still introduces some stale information and both variants remain far below the on-policy baseline (1.4.1). These results show that improved average performance need not come with smaller policy changes or more consistent episode returns.
 \end{answerbox}
 
 \clearpage
