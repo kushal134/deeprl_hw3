@@ -226,7 +226,7 @@ class SACAgent:
         dist = self.actor(obs)
         sampled_actions = dist.rsample()
         unclamped_log_probs = dist.log_prob(sampled_actions)
-        log_probs = raw_log_probs.clamp(-20, 20)
+        log_probs = unclamped_log_probs.clamp(-20, 20)
 
         q = torch.minimum(
             self.critic1(obs, sampled_actions),
