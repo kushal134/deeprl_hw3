@@ -259,47 +259,70 @@ written component.
 \subproblem{2.5 TD3 Evaluation}{\ptsTDEval}
 \boxlabel{Plots}
 \begin{answerbox}{10cm}
-% YOUR SOLUTION HERE
-\end{answerbox}
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/td3/default.png}\end{answerbox}
 \boxlabel{Final performance}
 \begin{answerbox}{2.5cm}
-% YOUR SOLUTION HERE
+Final performance: 275.3 ± 18.8
 \end{answerbox}
 
 \clearpage
 \subproblem{2.5 Target Policy Smoothing (\texttt{policy\_noise} $= 0$)}{\ptsTDSmooth}
 \boxlabel{Plots}
 \begin{answerbox}{9cm}
-% YOUR SOLUTION HERE
-\end{answerbox}
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/td3/policy_noise_0.png}\end{answerbox}
 \boxlabel{Final performance}
 \begin{answerbox}{2cm}
-% YOUR SOLUTION HERE
+Final performance: 253.0 ± 44.6
 \end{answerbox}
 \boxlabel{Discussion}
 \begin{answerbox}{6.5cm}
-% YOUR SOLUTION HERE
+\fontsize{11.5}{13}\selectfont
+From the plots, we observed that removing target policy smoothing made learning slower and less stable. With \(\sigma=0.2\), the evaluation return increased steadily  reaching about 250 by 300k steps and then plateauing around 270, with final return of \(275.3 \pm 18.8\). With \(\sigma=0\), the agent stayed around \(-60\) to \(-100\) for the first 250k steps and then improved more erratically, including a drop from about 175 at 400k steps to 85 at 450k. Its final return was \(253.0 \pm 44.6\). Importantly, it had more than twice the spread across evaluation episodes.
+
+The critic also showed a similar pattern. Q values are smoother with target policy smoothing whereas without it they are less consistent and noisier. This also matches the purpose of TD3's target smoothing. The noise which was added averages out the target Q value over the nearby actions hence, making it harder for the actor to exploit narrow Q function peaks. Overall, the results do suggest that smoothing does improve learning speed and stability rather than clearly improving final performance.
 \end{answerbox}
 
 \clearpage
 \subproblem{2.6 Policy Delay}{\ptsTDDelay}
 \boxlabel{Plots: \texttt{--delay 1}}
 \begin{answerbox}{9.5cm}
-% YOUR SOLUTION HERE
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/td3/delay_1.jpeg}
 \end{answerbox}
 \boxlabel{Plots: \texttt{--delay 4}}
 \begin{answerbox}{9.5cm}
-% YOUR SOLUTION HERE
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/td3/delay_4_final.png}
 \end{answerbox}
+
 
 \clearpage
 \boxlabel{2.6 (continued) Final performance}
 \begin{answerbox}{3.2cm}
-
+\texttt{policy delay = 1}: Final performance: 194.2 ± 69.8
+\texttt{policy delay = 4}: Final performance: 263.8 ± 20.9
 \end{answerbox}
 \boxlabel{Discussion}
+
 \begin{answerbox}{8cm}
-% YOUR SOLUTION HERE
+\texttt{policy\_delay} controls how often the actor and target networks are
+updated relative to the critics. A larger delay means each actor update uses a
+more accurate critic, but the actor gets fewer updates and the targets track the
+online networks more slowly. This is a tradeoff between noisy updates and slow
+learning.
+
+Final evaluation returns were $\approx 195$ (delay 1), $\approx 270$ (delay 2,
+baseline), and $\approx 264$ (delay 4). With delay 1, the actor exploits the
+critic's errors after every update, so learning was noisy: there was a large
+early $Q$ dip, a long reward plateau, and non-monotonic evaluation returns.
+
+Delay 4
+trained more smoothly. We expected it to learn more slowly, but this did not
+happen for this seed, since the actor still received about 125k effective updates (500k/2). The
+baseline performed best and we think ite because it kept most of the stability benefit while still
+updating often enough to learn quickly, which matches the TD3 paper's choice of
+$d = 2$.
+
+We observed large seed-to-seed variance: in some seeds neither setting learned
+well, and in others only one did.
 \end{answerbox}
 
 \clearpage
@@ -314,42 +337,54 @@ written component.
 \subproblem{3.3 SAC Evaluation}{\ptsSACEval}
 \boxlabel{Plots}
 \begin{answerbox}{10cm}
-% YOUR SOLUTION HERE
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/sac_images_final/3.3_training_curves.png}
 \end{answerbox}
 \boxlabel{Final performance}
 \begin{answerbox}{2.5cm}
-% YOUR SOLUTION HERE
+\small{
+\emph{Training:} Ending MA(50) = $219.1$. Returns (max/mean/min): all episodes $308.2/159.7/-567.6$; last 50 $308.0/219.1/-189.5$ (SD $103.5$). \emph{Evaluation:} Best checkpoint, deterministic actions: $265.3\pm18.9$ (mean $\pm$ SD). Runtime: $35.3$ minutes.
+The run uses the supplied hyperparameters with optional automatic temperature learning enabled.}
 \end{answerbox}
 
 \clearpage
 \subproblem{3.4 UTD Ratio}{\ptsSACUTD}
 \boxlabel{Plots: \texttt{--utd\_ratio 2}}
 \begin{answerbox}{9.5cm}
-% YOUR SOLUTION HERE
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/sac_images_final/3.4_utd2_training_curves.png}
+
 \end{answerbox}
 \boxlabel{Plots: \texttt{--utd\_ratio 4}}
 \begin{answerbox}{9.5cm}
-% YOUR SOLUTION HERE
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/sac_images_final/3.4_utd4_training_curves.png}
 \end{answerbox}
 
 \clearpage
 \boxlabel{3.4 (continued) Final return and total run time}
 \begin{answerbox}{3.2cm}
+\emph{UTD $2$:} Ending training MA(50) = $242.2$ (last-50 SD $113.2$). Best-checkpoint deterministic evaluation: $279.1\pm16.6$ (mean $\pm$ SD). Total runtime: $27.7$ minutes.\par
+\emph{UTD $4$:} Ending training MA(50) = $0.5$ (last-50 SD $21.5$). Best-checkpoint deterministic evaluation: $1.3\pm21.4$ (mean $\pm$ SD). Total runtime: $41.7$ minutes.\par
+\small{Both runs use $300$k environment steps. The UTD $4$ plot uses MA(37) but we note MA95) here.}
 \end{answerbox}
 \boxlabel{Analysis: sample efficiency vs.\ stability vs.\ wall-clock}
 \begin{answerbox}{8cm}
-% YOUR SOLUTION HERE
+\emph{Sample efficiency.} UTD $N$ performs $N$ gradient updates per environment step, reusing collected data more often. Using the same budget, MA(50) is $225.6$ for the UTD $1$, $242.2$ for UTD $2$, and $0.5$ for UTD $4$. So, UTD $2$ improves sample efficiency in this run, but more updates do not help UTD $4$.\par
+
+\emph{Stability.} UTD $2$ has large early critic-loss spikes, but these decrease as the policy learns high returns, while occasional poor episodes remain (last-50 SD $113.2$). UTD $4$ also has early loss spikes, then settles near zero return. Its smaller return SD ($21.5$) and low late critic losses describe consistently poor behavior, rather than successful learning. \emph{We think what happened is that more/repeated replay updates amplified errors in bootstrapped targets.}\par
+
+\emph{Wall-clock.} UTD $2$ takes $27.7$ minutes and UTD $4$ takes $41.7$ minutes for the same number of steps. The baseline takes $35.3$ minutes for $500$k steps, so its longer environment interaction budget must be considered. UTD $2$ offers the best observed tradeoff, while UTD $4$ costs more without improving returns. Results on MacBook Air 2026 with Apple M5 \& 24GB memory, and run in parallel.
 \end{answerbox}
 
 \clearpage
 \subproblem{3.5 Backup Action}{\ptsSACBackup}
 \boxlabel{Plots}
 \begin{answerbox}{10cm}
-% YOUR SOLUTION HERE
+\includegraphics[width=\linewidth,height=8.5cm,keepaspectratio]{src/runs/sac_images_final/3.5_training_curves.png}
 \end{answerbox}
 \boxlabel{Discussion (one to two sentences)}
 \begin{answerbox}{4cm}
-% YOUR SOLUTION HERE
+Using the mean action increased ending training MA(50) from $219.1$ to $234.5$, reduced last-50 return SD from $103.5$ to $81.8$, and best performance checkpoint evals from $265.3\pm18.9$ to $270.7\pm44.8$.
+
+Removing sampling noise during collection can avoid poor exploratory actions, but reduces exploration. The larger evaluation SD and late critic-loss spikes show that this run is not generally more stable, and actor updates still use stochastic samples.
 \end{answerbox}
 
 \clearpage
@@ -362,12 +397,12 @@ written component.
 What was the most confusing part of this homework, and what would have made it less
 confusing?
 \begin{answerbox}{4.5cm}
-% YOUR SOLUTION HERE
+N/A
 \end{answerbox}
 
 \textbf{Collaboration}: Detail the work division amongst your group below.
 \begin{answerbox}{4.5cm}
-% YOUR SOLUTION HERE
+All teammates have equally distributed the coding and theory question answering bits.
 \end{answerbox}
 
 \textbf{Time Spent}: How many hours did you spend working on this assignment? Your answer
@@ -377,16 +412,16 @@ will not affect your grade. Please average your answer over all the members of y
 \renewcommand{\arraystretch}{1.3}
 \begin{tabular}{r|>{\centering\arraybackslash}m{2.5cm}}
 Alone &
-% YOUR SOLUTION HERE
+5
 \\ \hline
 With teammates &
-% YOUR SOLUTION HERE
+8
 \\ \hline
 With other classmates &
-% YOUR SOLUTION HERE
+0
 \\ \hline
 At office hours &
-% YOUR SOLUTION HERE
+0
 \\
 \end{tabular}
 \end{answerbox}
