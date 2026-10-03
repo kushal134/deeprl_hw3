@@ -98,8 +98,6 @@ class SACAgent:
             
             # ---------------- Problem 3.5: Deterministic Action ----------------
             ### BEGIN STUDENT SOLUTION - 3.5 ###
-            
-            ## need to uncomment this out later 
             # action = dist.mean_action
             ### END STUDENT SOLUTION  -  3.5 ###
             # Clamp to environment bounds
