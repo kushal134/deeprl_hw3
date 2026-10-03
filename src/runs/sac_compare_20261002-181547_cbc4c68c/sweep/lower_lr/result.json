@@ -1,0 +1,19 @@
+{
+  "label": "lower_lr",
+  "question": "3.3",
+  "hyperparameters": {
+    "lr": 0.0001,
+    "batch_size": 128,
+    "alpha": 0.2
+  },
+  "steps": 500000,
+  "utd_ratio": 1,
+  "deterministic_collection": false,
+  "ending_ma50": -13.043647007181299,
+  "ma50_at_300k": 74.03131891469155,
+  "evaluation_mean": 196.26137500003904,
+  "evaluation_sd": 57.254608940103445,
+  "runtime_seconds": 2007.4130739999237,
+  "run_folder": "/Users/vineethbhat/Desktop/Courses/deep-rl/deeprl_hw3/src/runs/sac_compare_20261002-181547_cbc4c68c/sweep/lower_lr/training/20261002-185736",
+  "latex": "\\noindent\\textbf{3.3}\\par\n\\emph{Training:} Ending MA(50) = $-13.0$. Returns (max/mean/min): all episodes $296.8/-5.8/-676.9$; last 50 $225.5/-13.0/-164.7$ (SD $65.9$).\\par\n\\emph{Evaluation:} Best checkpoint, deterministic actions: $196.3\\pm 57.3$ (mean $\\pm$ SD).\\par\n\\emph{Runtime:} $33.5$ minutes (parallel run).\\par\n"
+}

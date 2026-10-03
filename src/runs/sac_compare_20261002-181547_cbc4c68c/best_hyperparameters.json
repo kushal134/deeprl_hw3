@@ -1,0 +1,14 @@
+{
+  "selection_metric": "ending training MA(50)",
+  "seed": 42000,
+  "alpha_mode": "learnable",
+  "winner": "larger_batch",
+  "ending_ma50": 265.66724407789434,
+  "hyperparameters": {
+    "lr": 0.0003,
+    "batch_size": 256,
+    "alpha": 0.2
+  },
+  "selected_3_3_run": "/Users/vineethbhat/Desktop/Courses/deep-rl/deeprl_hw3/src/runs/sac_compare_20261002-181547_cbc4c68c/sweep/larger_batch/training/20261002-185736",
+  "failed_runs": []
+}
