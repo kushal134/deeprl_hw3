@@ -64,6 +64,13 @@ class SACAgent:
         for net in (self.target_critic1, self.target_critic2):
             for p in net.parameters():
                 p.requires_grad_(False)
+
+        # learnable alpha
+        self.log_alpha = nn.Parameter(
+            torch.tensor(np.log(alpha), dtype=torch.float32, device=self.device)
+        )
+        self.alpha_opt = optim.Adam([self.log_alpha], lr=lr)
+        self.target_entropy = -float(self.act_dim)
         ### END STUDENT SOLUTION  -  3.1.1 ###
         
         # Optimizers
@@ -186,6 +193,7 @@ class SACAgent:
                 self.target_critic2(next_obs, next_actions),
             )
 
+            self.alpha = self.log_alpha.exp().detach()
             target_q = rewards + self.gamma * \
                 (1 - dones) * \
                 (next_q - self.alpha * next_log_probs)
@@ -217,7 +225,8 @@ class SACAgent:
         ### BEGIN STUDENT SOLUTION - 3.1.4 ###
         dist = self.actor(obs)
         sampled_actions = dist.rsample()
-        log_probs = dist.log_prob(sampled_actions).clamp(-20, 20)
+        unclamped_log_probs = dist.log_prob(sampled_actions)
+        log_probs = unclamped_log_probs.clamp(-20, 20)
 
         q = torch.minimum(
             self.critic1(obs, sampled_actions),
@@ -231,6 +240,12 @@ class SACAgent:
         self.actor_opt.step()
 
         entropy = float(-log_probs.detach().mean().item()) # to CPU:D
+
+        alpha_loss = -(self.log_alpha * (unclamped_log_probs.detach() + self.target_entropy)).mean()
+
+        self.alpha_opt.zero_grad()
+        alpha_loss.backward()
+        self.alpha_opt.step()
         ### END STUDENT SOLUTION  -  3.1.4 ###
         
         # ---------------- Problem 3.1.5: Target soft-updates ---------------

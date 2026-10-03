@@ -1,0 +1,13 @@
+{
+  "question": "3.3",
+  "steps": 500000,
+  "utd_ratio": 1,
+  "deterministic_collection": false,
+  "seed": 42000,
+  "hyperparameters": {
+    "lr": 0.0001,
+    "batch_size": 256,
+    "alpha": 0.2
+  },
+  "threads": "1"
+}

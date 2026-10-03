@@ -1,0 +1,78 @@
+[
+  {
+    "label": "default_reused",
+    "question": "3.3",
+    "hyperparameters": {
+      "lr": 0.0003,
+      "batch_size": 128,
+      "alpha": 0.2
+    },
+    "steps": 500000,
+    "utd_ratio": 1,
+    "deterministic_collection": false,
+    "ending_ma50": 219.07571967218092,
+    "ma50_at_300k": 225.62955453770672,
+    "evaluation_mean": 265.2864914382255,
+    "evaluation_sd": 18.85221556806546,
+    "runtime_seconds": 2115.011173042003,
+    "run_folder": "/Users/vineethbhat/Desktop/Courses/deep-rl/deeprl_hw3/src/runs/sac_compare_20261002-181547_cbc4c68c/default/3.3/training/20261002-181552",
+    "latex": "\\noindent\\textbf{3.3}\\par\n\\emph{Training:} Ending MA(50) = $219.1$. Returns (max/mean/min): all episodes $308.2/159.7/-567.6$; last 50 $308.0/219.1/-189.5$ (SD $103.5$).\\par\n\\emph{Evaluation:} Best checkpoint, deterministic actions: $265.3\\pm 18.9$ (mean $\\pm$ SD).\\par\n\\emph{Runtime:} $35.3$ minutes (parallel run).\\par\n"
+  },
+  {
+    "label": "larger_batch",
+    "question": "3.3",
+    "hyperparameters": {
+      "lr": 0.0003,
+      "batch_size": 256,
+      "alpha": 0.2
+    },
+    "steps": 500000,
+    "utd_ratio": 1,
+    "deterministic_collection": false,
+    "ending_ma50": 265.66724407789434,
+    "ma50_at_300k": 192.2385143394224,
+    "evaluation_mean": 278.35650300865495,
+    "evaluation_sd": 23.633980034256158,
+    "runtime_seconds": 1977.6943325420143,
+    "run_folder": "/Users/vineethbhat/Desktop/Courses/deep-rl/deeprl_hw3/src/runs/sac_compare_20261002-181547_cbc4c68c/sweep/larger_batch/training/20261002-185736",
+    "latex": "\\noindent\\textbf{3.3}\\par\n\\emph{Training:} Ending MA(50) = $265.7$. Returns (max/mean/min): all episodes $321.7/144.5/-561.2$; last 50 $314.4/265.7/64.1$ (SD $50.1$).\\par\n\\emph{Evaluation:} Best checkpoint, deterministic actions: $278.4\\pm 23.6$ (mean $\\pm$ SD).\\par\n\\emph{Runtime:} $33.0$ minutes (parallel run).\\par\n"
+  },
+  {
+    "label": "lower_lr_larger_batch",
+    "question": "3.3",
+    "hyperparameters": {
+      "lr": 0.0001,
+      "batch_size": 256,
+      "alpha": 0.2
+    },
+    "steps": 500000,
+    "utd_ratio": 1,
+    "deterministic_collection": false,
+    "ending_ma50": 222.661373870574,
+    "ma50_at_300k": 198.66277951586102,
+    "evaluation_mean": 264.3094436111566,
+    "evaluation_sd": 31.67848100182656,
+    "runtime_seconds": 1995.6362120410195,
+    "run_folder": "/Users/vineethbhat/Desktop/Courses/deep-rl/deeprl_hw3/src/runs/sac_compare_20261002-181547_cbc4c68c/sweep/lower_lr_larger_batch/training/20261002-185736",
+    "latex": "\\noindent\\textbf{3.3}\\par\n\\emph{Training:} Ending MA(50) = $222.7$. Returns (max/mean/min): all episodes $321.7/131.7/-685.0$; last 50 $316.1/222.7/-563.1$ (SD $169.4$).\\par\n\\emph{Evaluation:} Best checkpoint, deterministic actions: $264.3\\pm 31.7$ (mean $\\pm$ SD).\\par\n\\emph{Runtime:} $33.3$ minutes (parallel run).\\par\n"
+  },
+  {
+    "label": "lower_lr",
+    "question": "3.3",
+    "hyperparameters": {
+      "lr": 0.0001,
+      "batch_size": 128,
+      "alpha": 0.2
+    },
+    "steps": 500000,
+    "utd_ratio": 1,
+    "deterministic_collection": false,
+    "ending_ma50": -13.043647007181299,
+    "ma50_at_300k": 74.03131891469155,
+    "evaluation_mean": 196.26137500003904,
+    "evaluation_sd": 57.254608940103445,
+    "runtime_seconds": 2007.4130739999237,
+    "run_folder": "/Users/vineethbhat/Desktop/Courses/deep-rl/deeprl_hw3/src/runs/sac_compare_20261002-181547_cbc4c68c/sweep/lower_lr/training/20261002-185736",
+    "latex": "\\noindent\\textbf{3.3}\\par\n\\emph{Training:} Ending MA(50) = $-13.0$. Returns (max/mean/min): all episodes $296.8/-5.8/-676.9$; last 50 $225.5/-13.0/-164.7$ (SD $65.9$).\\par\n\\emph{Evaluation:} Best checkpoint, deterministic actions: $196.3\\pm 57.3$ (mean $\\pm$ SD).\\par\n\\emph{Runtime:} $33.5$ minutes (parallel run).\\par\n"
+  }
+]
