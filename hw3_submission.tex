@@ -145,8 +145,9 @@ written component.
 \end{answerbox}
 \boxlabel{Final performance}
 \begin{answerbox}{2.5cm}
+Final performance: $214.9\pm 65.4$. \par
 \emph{Training:} Ending MA(50) = $142.3$. Training returns (max/mean/min): all episodes $291.1/-56.5/-619.4$; last 50 $271.9/142.3/-20.4$ (SD $51.5$). \textbf{Note}: $\text{Max} > 200$.\par
-\emph{Evaluation:} Best checkpoint, deterministic actions: $214.9\pm 65.4$ (mean $\pm$ SD).\par
+
 \end{answerbox}
 
 \clearpage
@@ -157,8 +158,8 @@ written component.
 \end{answerbox}
 \boxlabel{Final performance}
 \begin{answerbox}{2cm}
+Final performance: $240.1\pm 70.9$.\par
 \emph{Training:} Ending MA(50) = $-104.5$. Training returns (max/mean/min): all episodes $264.5/-74.5/-698.4$; last 50 $18.6/-104.5/-239.7$ (SD $54.2$).\par
-\emph{Evaluation:} Best checkpoint, deterministic actions: $240.1\pm 70.9$ (mean $\pm$ SD).\par
 \end{answerbox}
 \boxlabel{Reflection: clipping vs.\ KL penalty}
 \begin{answerbox}{6.5cm}
@@ -175,8 +176,8 @@ Clipping's adv. are simplicity and fewer large KL and loss spikes and better ret
 \end{answerbox}
 \boxlabel{Final returns}
 \begin{answerbox}{2cm}
+Final Performance: $254.2\pm 57.0$.\par
 \emph{Training:} Ending MA(50) = $245.3$. Training returns (max/mean/min): all episodes $311.5/2.8/-614.8$; last 50 $302.6/245.3/15.3$ (SD $53.9$).\par
-\emph{Evaluation:} Best checkpoint, deterministic actions: $254.2\pm 57.0$ (mean $\pm$ SD).\par
 \end{answerbox}
 \boxlabel{Discussion}
 \begin{answerbox}{6.5cm}
@@ -195,8 +196,8 @@ The trade-off is faster learning versus potentially less stable updates in terms
 \end{answerbox}
 \boxlabel{Final returns}
 \begin{answerbox}{2cm}
+Final Performance: $137.4\pm 115.9$.\par
 \emph{Training:} Ending MA(50) = $115.9$. Training returns (max/mean/min): all episodes $260.8/-73.0/-540.8$; last 50 $224.2/115.9/-6.8$ (SD $63.4$).\par
-\emph{Evaluation:} Best checkpoint, deterministic actions: $137.4\pm 115.9$ (mean $\pm$ SD).\par
 \end{answerbox}
 \boxlabel{Discussion}
 \begin{answerbox}{6.5cm}
@@ -215,8 +216,8 @@ In higher-dimensional or more complex environments, conservative updates may hel
 \end{answerbox}
 \boxlabel{Final return}
 \begin{answerbox}{2cm}
+Final Performance: $-113.3\pm 81.4$.\par
 \emph{Training:} Ending MA(50) = $-6.5$. Training returns (max/mean/min): all episodes $77.3/-82.5/-560.8$; last 50 $41.4/-6.5/-67.9$ (SD $25.1$).\par
-\emph{Evaluation:} Best checkpoint, deterministic actions: $-113.3\pm 81.4$ (mean $\pm$ SD).\par
 \end{answerbox}
 \boxlabel{Discussion}
 \begin{answerbox}{6.5cm}
@@ -237,8 +238,8 @@ Using \emph{more recent trajectories} and recomputing advantages and value targe
 \end{answerbox}
 \boxlabel{Final return}
 \begin{answerbox}{2cm}
+Final Performance: $-100.2\pm 55.0$ .\par
 \emph{Training:} Ending MA(50) = $3.3$. Training returns (max/mean/min): all episodes $128.1/-75.4/-543.4$; last 50 $128.1/3.3/-302.1$ (SD $92.9$).\par
-\emph{Evaluation:} Best checkpoint, deterministic actions: $-100.2\pm 55.0$ (mean $\pm$ SD).\par
 \end{answerbox}
 \boxlabel{Discussion}
 \begin{answerbox}{6.5cm}
@@ -297,7 +298,7 @@ The critic also showed a similar pattern. Q values are smoother with target poli
 \clearpage
 \boxlabel{2.6 (continued) Final performance}
 \begin{answerbox}{3.2cm}
-\texttt{policy delay = 1}: Final performance: 194.2 ± 69.8
+\texttt{policy delay = 1}: Final performance: 194.2 ± 69.8 \par
 \texttt{policy delay = 4}: Final performance: 263.8 ± 20.9
 \end{answerbox}
 \boxlabel{Discussion}
@@ -342,7 +343,9 @@ written component.
 \boxlabel{Final performance}
 \begin{answerbox}{2.5cm}
 \small{
-\emph{Training:} Ending MA(50) = $219.1$. Returns (max/mean/min): all episodes $308.2/159.7/-567.6$; last 50 $308.0/219.1/-189.5$ (SD $103.5$). \emph{Evaluation:} Best checkpoint, deterministic actions: $265.3\pm18.9$ (mean $\pm$ SD). Runtime: $35.3$ minutes.
+Final Performance: $265.3\pm18.9$\par
+\emph{Training:} Ending MA(50) = $219.1$. Returns (max/mean/min): all episodes $308.2/159.7/-567.6$; last 50 $308.0/219.1/-189.5$ (SD $103.5$)
+Runtime: $35.3$ minutes.
 The run uses the supplied hyperparameters with optional automatic temperature learning enabled.}
 \end{answerbox}
 
@@ -361,8 +364,8 @@ The run uses the supplied hyperparameters with optional automatic temperature le
 \clearpage
 \boxlabel{3.4 (continued) Final return and total run time}
 \begin{answerbox}{3.2cm}
-\emph{UTD $2$:} Ending training MA(50) = $242.2$ (last-50 SD $113.2$). Best-checkpoint deterministic evaluation: $279.1\pm16.6$ (mean $\pm$ SD). Total runtime: $27.7$ minutes.\par
-\emph{UTD $4$:} Ending training MA(50) = $0.5$ (last-50 SD $21.5$). Best-checkpoint deterministic evaluation: $1.3\pm21.4$ (mean $\pm$ SD). Total runtime: $41.7$ minutes.\par
+\emph{UTD $2$:} Final Performance: $279.1\pm16.6$. Ending training MA(50) = $242.2$ (last-50 SD $113.2$).Total runtime: $27.7$ minutes.\par
+\emph{UTD $4$:} Final Performance: $1.3\pm21.4$. Ending training MA(50) = $0.5$ (last-50 SD $21.5$). Total runtime: $41.7$ minutes.\par
 \small{Both runs use $300$k environment steps. The UTD $4$ plot uses MA(37) but we note MA95) here.}
 \end{answerbox}
 \boxlabel{Analysis: sample efficiency vs.\ stability vs.\ wall-clock}
